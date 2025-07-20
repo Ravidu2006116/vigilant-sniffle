@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+  <meta charset="UTF-8">
+  <title>Student details</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .tab-content { display: none; }
+    .tab-active { display: block; }
+  </style>
+</head>
+<body class="bg-gray-100 p-6">
+
+  <!-- Login Page -->
+  <div id="loginPage" class="flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded shadow-md w-80">
+      <h2 class="text-xl font-bold mb-4">🔐 Login</h2>
+      <input id="Student ID" type="text" placeholder="Student ID" class="w-full p-2 border mb-2 rounded">
+      <input id="password" type="password" placeholder="Password" class="w-full p-2 border mb-4 rounded">
+      <button onclick="login()" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Login</button>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="mainDashboard" class="hidden">
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h1 class="text-2xl font-bold text-blue-700 mb-4">📘 Student Dashboard</h1>
+
+      <!-- Navigation Tabs -->
+      <div class="mb-6 flex space-x-4">
+        <button onclick="showTab('dashboard')" class="bg-blue-500 text-white px-4 py-2 rounded">📊 ලකුණු</button>
+        <button onclick="showTab('notes')" class="bg-green-500 text-white px-4 py-2 rounded">📚 සටහන්</button>
+        <button onclick="showTab('profile')" class="bg-yellow-500 text-white px-4 py-2 rounded">👤 පැතිකඩ</button>
+      </div>
+
+      <!-- Profile Tab -->
+<div id="profile" class="tab-content hidden">
+  <h2 class="text-xl font-semibold mb-4">👤 Student Profile</h2>
+  <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+    <img src="E:\Screenshot (100).png" alt="Student Photo" class="w-40 h-40 object-cover rounded shadow">
+    <div>
+	  <p><strong>Student ID:</strong>THARU1234</p>
+	  <p><strong>Email Address:</strong> nilakshi2005814@gmail.com</p>
+      <p><strong>Full Name:</strong> C.D. Nilakshi Tharushika Herath</p>
+      <p><strong>Address:</strong> Rabawan,Bethkwewa,Kahatagasdigiliya</p>
+      <p><strong>District:</strong> Auradhapura</p>
+      <p><strong>City:</strong> Kahatagasdigiliya</p>
+	  <p><strong>Telephone Number:</strong> 0740694294</p>
+      <p><strong>WhatsApp Number:</strong> 0740694294</p>
+      
+    </div>
+  </div>
+</div>
+    <!-- Dashboard Tab -->
+<div id="dashboard" class="tab-content tab-active">
+  <h2 class="text-xl font-semibold mb-2">📊 Mark Analyzing</h2>
+  <canvas id="marksChart" class="mb-4"></canvas>
+
+  <!-- Editable Table for Subject Marks -->
+  <h3 class="text-lg font-semibold mt-8 mb-2">📄 Marks Table </h3>
+  <div class="overflow-x-auto">
+    <table id="marksTable" class="min-w-full bg-white border border-gray-300">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="border px-4 py-2">පත්‍ර අංකය</th>
+          <th class="border px-4 py-2">විෂයය</th>
+          <th class="border px-4 py-2">MCQ</th>
+          <th class="border px-4 py-2">Essay</th>
+          <th class="border px-4 py-2">Total</th>
+        </tr>
+      </thead>
+      <tbody contenteditable="true" oninput="updateChartFromTable()">
+        <tr>
+          <td class="border px-4 py-2">01</td>
+          <td class="border px-4 py-2">Accounting</td>
+          <td class="border px-4 py-2">80</td>
+          <td class="border px-4 py-2">00</td>
+          <td class="border px-4 py-2">80</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2">01</td>
+          <td class="border px-4 py-2">Economics</td>
+          <td class="border px-4 py-2">34</td>
+          <td class="border px-4 py-2">56</td>
+          <td class="border px-4 py-2">90</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2">01</td>
+          <td class="border px-4 py-2">Business Study</td>
+          <td class="border px-4 py-2">90</td>
+          <td class="border px-4 py-2">00</td>
+          <td class="border px-4 py-2">90</td>
+        </tr>
+		<tr>
+          <td class="border px-4 py-2">02</td>
+          <td class="border px-4 py-2">Business Study</td>
+          <td class="border px-4 py-2">48.5</td>
+          <td class="border px-4 py-2">00</td>
+          <td class="border px-4 py-2">48.5</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+ 
+</div>
+
+
+
+
+
+
+     
+     <!-- Notes Tab -->
+       <div id="notes" class="tab-content">
+    <h2 class="text-xl font-semibold mb-4">📚 Notes</h2>
+  <div class="space-y-6">
+   
+    <!-- Accounting -->
+      <div class="bg-gray-50 p-4 rounded shadow">
+       <h3 class="text-lg font-bold text-blue-700">📘 Accounting</h3>
+       <ul class="list-disc list-inside">
+		<li><strong>පාඩම 01- මුලික සංකල්ප</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/43148/mod_resource/content/2/SAL_Acc_U1_Introduction.pdf" class="text-blue-600 underline" target="_blank">PDF බාගන්න</a></li>
+		<li><strong>පාඩම 14- කළමනාකරණ ගිණුම්කරණයේ මූලික සංකල්ප ඇගයීම</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387304/mod_resource/content/1/14.%20%E0%B6%9A%E0%B7%85%E0%B6%B8%E0%B6%B1%E0%B7%8F%E0%B6%9A%E0%B6%BB%E0%B6%AB%20%E0%B6%9C%E0%B7%92%E0%B6%AB%E0%B7%94%E0%B6%B8%E0%B7%8A%E0%B6%9A%E0%B6%BB%E0%B6%AB%E0%B6%BA.pdf" class="text-blue-600 underline" target="_blank">PDF බාගන්න</a></li>
+		<li><strong>පාඩම 15- පිරිවැය හැසිරීම හා පිරිවැය පරිමා ලාභ විශ්ලේෂණය තුළින් කළමනාකරණ තීරණ ගැනීම<strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387305/mod_resource/content/1/%E0%B6%B1%E0%B7%92%E0%B6%B4%E0%B7%94%E0%B6%B1%E0%B6%AD%E0%B7%8F%E0%B7%80%2015.%20%20%20%E0%B6%86%E0%B6%B1%E0%B7%8A%E0%B6%AD%E0%B7%92%E0%B6%9A%20%E0%B6%B4%E0%B7%92%E0%B6%BB%E0%B7%92%E0%B7%80%E0%B7%90%E0%B6%BA%20final%20%281%29.pdf" class="text-blue-600 underline" target="_blank">PDF බාගන්න</a></li>
+		<li><strong>පාඩම 16- ව්‍යාපාරික තීරණ ගැනීම සඳහා දර්ශකාංක භාවිත කරයි</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387307/mod_resource/content/1/Competency%2016.pdf" class="text-blue-600 underline" target="_blank">PDF බාගන්න</a></li>
+
+ </ul>
+</div>
+
+
+    <!-- Economics -->
+    <div class="bg-gray-50 p-4 rounded shadow">
+      <h3 class="text-lg font-bold text-green-700">📗 Economics</h3>
+      <ul class="list-disc list-inside">
+      <li><strong>පාඩම 01-ආර්ථික පද්ධතියක මූලික ආර්ථික ප්‍රශ්න සහ ඒවා විසඳා ගන්නා විකල්ප ක්‍රම</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/196292/mod_resource/content/1/12%20Econ%201%20edit%20%281%29%20final.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+      <li><strong>පාඩම 03- වෙළෙඳපොළට රජය මැදිහත් වන ආකාරය විමර්ශනය කිරීම</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387279/mod_resource/content/1/03%20-%20%E0%B7%80%E0%B7%99%E0%B7%85%E0%B7%99%E0%B6%B3%E0%B6%B4%E0%B7%9C%E0%B7%85%E0%B6%A7%20%E0%B6%BB%E0%B6%A2%E0%B6%BA%20%E0%B6%B8%E0%B7%90%E0%B6%AF%E0%B7%92%E0%B7%84%E0%B6%AD%E0%B7%8A%20%E0%B7%80%E0%B6%B1%20%E0%B6%86%E0%B6%9A%E0%B7%8F%E0%B6%BB%E0%B6%BA%20PPT.pdf" class="text-blue-600 underline" target="_blank" download>PDF බාගන්න</a></li>
+	  <li><strong>පාඩම 05- සාර්ව ආර්ථික ක්‍රියාකාරීත්වය සැලකිල්ලට ගනිමින් ජාතික ගිණුම් සකස් කිරීමේ සූදානම</strong> - <a href="Downloads/Short-Note-02.pdf" class="text-blue-600 underline" target="_blank" download>PDF බාගන්න</a></li> <li><strong>පාඩම 12- ශ්‍රී ලංකා ආර්ථිකය</strong> - <a href="Downloads/Short-Note-02.pdf" class="text-blue-600 underline" target="_blank" download>PDF බාගන්න</a></li> 
+	  <li><strong>පාඩම 10- විදේශ මූල්‍ය ශ්‍රී ලංකා ආර්ථිකයට බලපාන ආකාරය</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387285/mod_resource/content/1/10%20%20%20%E0%B7%80%E0%B7%92%E0%B6%AF%E0%B7%9A%E0%B7%81%20%E0%B6%B8%E0%B7%96%E0%B6%BD%E0%B7%8A_%E0%B6%BA%20%20PPT.pdf" class="text-blue-600 underline" target="_blank" download>PDF බාගන්න</a></li>
+	  <li><strong>පාඩම 11- සංවර්ධනයේ විවිධත්වය විග්‍රහ කරමින් තිරසර සංවර්ධනයට දායක වීමේ ඇල්ම ප්‍රදර්ශනය</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387287/mod_resource/content/1/11%20%20%20%E0%B7%83%E0%B6%82%E0%B7%80%E0%B6%BB%E0%B7%8A%E0%B6%B0%E0%B6%B1%E0%B6%BA%E0%B7%9A%20%E0%B7%80%E0%B7%92%E0%B7%80%E0%B7%92%E0%B6%B0%E0%B6%AD%E0%B7%8A%E0%B7%80%E0%B6%BA%20Word.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+	  <li><strong>පාඩම 12- ශ්‍රී ලංකා ආර්ථිකය</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387281/mod_resource/content/1/5%20%E0%B6%A2%E0%B7%8F%E0%B6%AD%E0%B7%92%E0%B6%9A%20%E0%B6%9C%E0%B7%92%E0%B6%B1%E0%B7%94%E0%B6%B8%E0%B7%8A%E0%B6%9A%E0%B6%BB%E0%B6%AB%E0%B6%BA%20%20Word.pdf" class="text-blue-600 underline" target="_blank" download>PDF බාගන්න</a></li>
+	</ul>
+    </div>
+
+    <!-- Business Studies -->
+    <div class="bg-gray-50 p-4 rounded shadow">
+      <h3 class="text-lg font-bold text-yellow-700">📙 Business Study</h3>
+      <ul class="list-disc list-inside">
+        <li><strong>පාඩම 01- ව්‍යාපාර පදනම හා ව්‍යාපාර ක්‍රියාත්මක වන පරිසරය විමසීම</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/171491/mod_resource/content/1/12%20BS%201.0%20%281%29.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+        <li><strong>පාඩම 02- ව්‍යාපාර පරිසරයට අනුගත වීම සඳහා ව්‍යාපාර, සමාජයීය වගකීම් හා ආචාරධර්ම</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/171623/mod_resource/content/1/12%20BS%202.0.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+        <li><strong>පාඩම 14- ව්‍යාපාර සාර්ථකත්වය සඳහා අළෙවි කළමනාකරණය</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387311/mod_resource/content/1/14%20%E0%B6%85%E0%B6%BD%E0%B7%99%E0%B7%80%E0%B7%92%20%E0%B6%9A%E0%B7%85%E0%B6%B8%E0%B6%B1%E0%B7%8F%E0%B6%9A%E0%B6%BB%E0%B6%AB%E0%B6%BA%20Word.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+        <li><strong>පාඩම 15- ව්‍යාපාර සාර්ථකත්වය සඳහා මූල්‍ය කළමනාකරණය</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387313/mod_resource/content/1/15%20%E0%B6%B8%E0%B7%96%E0%B6%BD%E0%B7%8A_%E0%B6%BA%20%20%E0%B6%9A%E0%B7%85%E0%B6%B8%E0%B6%B1%E0%B7%8F%E0%B6%9A%E0%B6%BB%E0%B6%AB%E0%B6%BA%20Word.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+        <li><strong>පාඩම 16-  ව්‍යාපාර සාර්ථකත්වය සඳහා මානව සම්පත</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387315/mod_resource/content/1/16%20%E0%B6%B8%E0%B7%8F%E0%B6%B1%E0%B7%80%20%E0%B7%83%E0%B6%B8%E0%B7%8A%E0%B6%B4%E0%B6%AD%E0%B7%8A%20%E0%B6%9A%E0%B7%85%E0%B6%B8%E0%B6%B1%E0%B7%8F%E0%B6%9A%E0%B6%BB%E0%B6%AB%E0%B6%BA%20Word.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+		<li><strong>පාඩම 17- ව්‍යාපාරවල සාර්ථකත්වය සඳහා තොරතුරු පද්ධති </strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387316/mod_resource/content/1/17%20%20%E0%B6%AD%E0%B7%9C%E0%B6%BB%E0%B6%AD%E0%B7%94%E0%B6%BB%E0%B7%94%20%E0%B6%B4%E0%B6%AF%E0%B7%8A%E0%B6%B0%E0%B6%AD%E0%B7%92%20%20Word.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+		<li><strong>පාඩම 18- ව්‍යාපාර සැලසුමක්</strong> - <a href="https://www.e-thaksalawa.moe.gov.lk/moodle/pluginfile.php/387318/mod_resource/content/1/18%20%E0%B7%80%E0%B7%8A_%E0%B6%BA%E0%B7%8F%E0%B6%B4%E0%B7%8F%E0%B6%BB%20%E0%B7%83%E0%B7%90%E0%B6%BD%E0%B7%90%E0%B7%83%E0%B7%8A%E0%B6%B8%20Word.pdf" class="text-blue-600 underline" download>PDF බාගන්න</a></li>
+
+	</ul>
+    </div>
+  </div>
+</div>
+
+  <script>
+  function login() {
+  const s = document.getElementById('Student ID').value;
+  const p = document.getElementById('password').value;
+
+  if (s === "tharu1234" && p === "1234") {
+    sessionStorage.setItem("loggedIn", "true");
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('mainDashboard').classList.remove('hidden');
+    showTab('profile');
+  } else {
+    alert("මුරපදය හෝ නාමය වැරදි");
+  }
+}
+
+
+    function showTab(id) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('tab-active'));
+      document.getElementById(id).classList.add('tab-active');
+    }
+document.addEventListener("DOMContentLoaded", () => {
+  const isLoggedIn = sessionStorage.getItem("loggedIn");
+
+  if (isLoggedIn === "true") {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("mainDashboard").classList.remove("hidden");
+
+    // Default tab after login
+    showTab('profile');
+  } else {
+    document.getElementById("loginPage").classList.remove("hidden");
+    document.getElementById("mainDashboard").classList.add("hidden");
+  }
+});
+
+
+const ctx = document.getElementById('marksChart').getContext('2d');
+let chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['Paper 1'],
+    datasets: []
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+
+function updateChartFromTable() {
+  const table = document.getElementById('marksTable');
+  const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+  const subjects = {};
+  rows.forEach(row => {
+    const cells = row.querySelectorAll('td');
+    const subject = cells[1].innerText.trim();
+    const mcq = parseInt(cells[2].innerText.trim()) || 0;
+    const essay = parseInt(cells[3].innerText.trim()) || 0;
+    const total = parseInt(cells[4].innerText.trim()) || 0;
+
+    if (!subjects[subject]) subjects[subject] = { mcq: [], essay: [], total: [] };
+    subjects[subject].mcq.push(mcq);
+    subjects[subject].essay.push(essay);
+    subjects[subject].total.push(total);
+  });
+
+  const datasets = [];
+  Object.keys(subjects).forEach(subject => {
+    datasets.push({
+      label: subject + ' (MCQ)',
+      data: subjects[subject].mcq,
+      borderColor: 'blue',
+      fill: false
+    });
+    datasets.push({
+      label: subject + ' (Essay)',
+      data: subjects[subject].essay,
+      borderColor: 'green',
+      fill: false
+    });
+    datasets.push({
+      label: subject + ' (Total)',
+      data: subjects[subject].total,
+      borderColor: 'orange',
+      fill: false
+    });
+  });
+
+  chart.data.labels = [...new Set(rows.map(row => row.cells[0].innerText.trim()))];
+  chart.data.datasets = datasets;
+  chart.update();
+}
+
+document.addEventListener('DOMContentLoaded', updateChartFromTable);
+
+    </script>
+    
+</body>
+</html>
